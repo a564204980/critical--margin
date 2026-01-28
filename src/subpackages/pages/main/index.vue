@@ -1,0 +1,204 @@
+<template>
+    <view class="blue-collar-container">
+        <view id="top-container" class="top-container">
+            <view class="top-info">
+                <view class="top-info-header">
+                    <text class="section-label">时间轴</text>
+                    <text class="section-label">可用现金</text>
+                </view>
+                <view class="top-info-content">
+                    <text class="title">
+                        第1周<text class="line"></text>第1天<text class="time">上午</text>
+                    </text>
+                    <text class="cash">$128.50</text>
+                </view>
+            </view>
+            <view class="flex justify-between">
+                <StatusBar :statusBars="statusBars" />
+                <view class="flex items-center credit-info credit-status-card">
+                    <text class="material-symbols-outlined" style="color:#8892a7">credit_card</text>
+                    <view class="score-detail ">
+                        <view class="text-gray">信用分</view>
+                        <view class="text-white">625</view>
+                    </view>
+                </view>
+            </view>
+        </view>
+        <CustomTabbar currentPath="subpackages/pages/main/index" />
+
+        <view class="main-visual">
+            <Visual id="visual-area">
+                <Tag :text="address" />
+            </Visual>
+            <Action id="action-list-container" :data="actionList" class="action-wrapper" :scrollHeight="scrollHeight" />
+        </view>
+
+        <!-- <view class="ambient text-gray flex justify-center">
+            <text>“那阵持续的低鸣裹着疲惫渗透进来，分不清是外界声响，还是自己为生计运转到麻木的心跳。”</text>
+        </view> -->
+    </view>
+</template>
+
+<script setup lang="ts">
+import CustomTabbar from '@/components/CustomTabbar/CustomTabbar.vue'
+import StatusBar from "@/components/StatusBar.vue/StatusBar.vue"
+import Tag from "@/components/Tag/Tag.vue"
+import Visual from "./components/Visual.vue"
+import Action from "./components/Action.vue"
+import type { StatusBarItem } from "@/components/StatusBar.vue/types"
+import { onMounted, ref, getCurrentInstance } from 'vue'
+import { useGameStore } from '@/stores/game'
+
+const gameStore = useGameStore()
+
+const statusBars: StatusBarItem[] = [{
+    label: '财务',
+    value: 0.25,
+    color: '#cb504e',
+    icon: "ecg_heart"
+},
+{
+    label: '精神',
+    value: 0.4,
+    color: '#eebc5e',
+    icon: "cognition_2"
+},
+{
+    label: '体力',
+    value: 0.8,
+    color: '#64b5f6',
+    icon: "bolt"
+}]
+
+const actionList = ref(gameStore.availableActions)
+const scrollHeight = ref<number>(0)
+const address = ref<string>("车库工作室（个人）")
+
+
+onMounted(() => {
+    const instance = getCurrentInstance()
+    const sysInfo = uni.getSystemInfoSync()
+    const windowHeight = sysInfo.windowHeight
+
+    const query = uni.createSelectorQuery().in(instance)
+
+    // 直接获取 Action 组件的位置信息
+    query.select('#action-list-container').boundingClientRect()
+
+    query.exec((res) => {
+        if (!res[0]) return
+        const actionRect = res[0]
+        const tabbarHeight = uni.upx2px(200)
+
+        // 剩余高度 = 屏幕高度 - Action组件的起始顶端位置 - 底部Tabbar高度
+        const remainingPx = windowHeight - actionRect.top - tabbarHeight
+
+        const pixelRatio = 750 / sysInfo.windowWidth
+        scrollHeight.value = (remainingPx * pixelRatio) - 20
+    })
+})
+
+</script>
+
+<style scoped lang="scss">
+.blue-collar-container {
+    display: flex;
+    flex-direction: column;
+    height: 100vh; // Changed from min-height
+    background: #0a0a0a;
+    overflow: hidden; // Prevent page scroll
+}
+
+.main-visual {
+    flex: 1;
+    height: 0; // Essential for flex items to scroll
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.top-container {
+    padding: 20rpx 12rpx;
+}
+
+.top-info {
+    margin-bottom: 20rpx
+}
+
+.top-info-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 16rpx;
+}
+
+.top-info-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 50rpx;
+    font-weight: 700;
+
+    .title {
+
+        color: #ffffff;
+        display: flex;
+        align-items: center;
+
+        .line {
+            display: inline-block;
+            margin: 0 20rpx;
+            width: 2rpx;
+            height: 38rpx;
+            border-left: 2rpx solid #ffffff;
+        }
+
+        .time {
+            font-size: 38rpx;
+            margin-left: 20rpx;
+        }
+    }
+
+    .cash {
+        color: #fcd34d;
+    }
+}
+
+
+.section-label {
+    font-size: 28rpx;
+    font-weight: 500;
+    color: #9ca3af;
+}
+
+.credit-status-card {
+    background-color: #3e413d;
+    padding: 3rpx 20rpx;
+    border-radius: 60rpx;
+}
+
+.score-detail {
+    margin-left: 14rpx;
+
+    &>view:nth-child(1) {
+        font-size: 26rpx
+    }
+
+    &>view:nth-child(2) {
+        font-size: 30rpx
+    }
+}
+
+.ambient {
+    position: fixed;
+    bottom: 200rpx;
+
+    text {
+        font-style: italic;
+        font-size: 26rpx;
+        padding: 30rpx;
+        line-height: 1.6;
+        display: block;
+    }
+}
+</style>

@@ -6,25 +6,33 @@
 				"navigationBarTitleText": "登录",
 				"navigationStyle": "custom"
 			}
-		},
+		}
+		
+	],
+	"subPackages": [
 		{
-			"path": "pages/narration/index",
-			"style": {
-				"navigationBarTitleText": "叙事",
-				"navigationStyle": "custom"
-			}
-		},
-		{
-			"path": "pages/main/index",
-			"style": {
-				"navigationBarTitleText": "叙事"
-			}
-		},
-		{
-			"path": "pages/map/index",
-			"style": {
-				"navigationBarTitleText": "地图"
-			}
+			"root": "subpackages",
+			"pages": [
+				{
+					"path": "pages/narration/index",
+					"style": {
+						"navigationBarTitleText": "叙事",
+						"navigationStyle": "custom"
+					}
+				},
+				{
+					"path": "pages/map/index",
+					"style": {
+						"navigationBarTitleText": "地图"
+					}
+				},
+				{
+					"path": "pages/main/index",
+					"style": {
+						"navigationBarTitleText": "主页"
+					}
+				}
+			]
 		}
 	],
 	"globalStyle": {
@@ -32,5 +40,11 @@
 		"navigationBarTitleText": "uni-app",
 		"navigationBarBackgroundColor": "#fff",
 		"backgroundColor": "#F8F8F8"
+	},
+	"preloadRule": {
+		"pages/login/index": {
+			"network": "all",
+			"packages": ["subpackages"]
+		}
 	}
 }

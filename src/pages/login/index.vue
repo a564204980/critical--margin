@@ -61,7 +61,7 @@ const handleStart = (): void => {
             resolve(true)
         }, 1000)
     }).then(() => {
-        uni.navigateTo({ url: '/pages/narration/index' })
+        uni.navigateTo({ url: '/subpackages/pages/narration/index' })
     }).finally(() => {
         setTimeout(() => {
             isPrimaryPressed.value = false

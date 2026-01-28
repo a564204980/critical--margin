@@ -57,7 +57,7 @@ onMounted(() => {
 })
 const handleScreenClick = () => {
     if (isFinished.value) {
-        uni.navigateTo({ url: '/pages/main/index' })
+        uni.navigateTo({ url: '/subpackages/pages/main/index' })
     }
 }
 </script>

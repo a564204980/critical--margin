@@ -20,10 +20,10 @@ const props = defineProps({
     currentPath: String
 })
 const tabList = [
-    { pagePath: 'pages/main/index', text: '行动', icon: 'directions_run', },
-    { pagePath: 'pages/main/index', text: '地图', icon: 'map', },
-    { pagePath: 'pages/map/index', text: '账单', icon: 'account_balance_wallet' },
-    { pagePath: 'pages/map/index', text: '系统', icon: 'tune' }
+    { pagePath: 'subpackages/pages/main/index', text: '行动', icon: 'directions_run', },
+    { pagePath: 'subpackages/pages/main/index', text: '地图', icon: 'map', },
+    { pagePath: 'subpackages/pages/map/index', text: '账单', icon: 'account_balance_wallet' },
+    { pagePath: 'subpackages/pages/map/index', text: '系统', icon: 'tune' }
 ]
 const currentTabbarIndex = ref<number>(0)
 
