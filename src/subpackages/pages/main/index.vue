@@ -4,6 +4,7 @@
             <view class="top-info">
                 <view class="top-info-header">
                     <text class="section-label">时间轴</text>
+                    <text class="section-label text-glitch ">信用危机惩罚</text>
                     <text class="section-label">可用现金</text>
                 </view>
                 <view class="top-info-content">
@@ -221,5 +222,115 @@ const add = () => {
         line-height: 1.6;
         display: block;
     }
+}
+
+
+@keyframes crisis-pulse {
+    0% {
+        box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4);
+    }
+
+    70% {
+        box-shadow: 0 0 0 10px rgba(239, 68, 68, 0);
+    }
+
+    100% {
+        box-shadow: 0 0 0 0 rgba(239, 68, 68, 0);
+    }
+}
+
+.crisis-border {
+    border: 1px solid #ef4444;
+    animation: crisis-pulse 2s infinite;
+}
+
+
+/* 定义故障动画关键帧 */
+@keyframes glitch-skew {
+    0% {
+        transform: skew(0deg);
+    }
+
+    20% {
+        transform: skew(-20deg);
+    }
+
+    40% {
+        transform: skew(10deg);
+    }
+
+    60% {
+        transform: skew(-5deg);
+    }
+
+    80% {
+        transform: skew(5deg);
+    }
+
+    100% {
+        transform: skew(0deg);
+    }
+}
+
+.text-glitch {
+    display: inline-block;
+    color: #ef4444;
+    /* 强制红色 */
+    position: relative;
+    /* 间歇性触发故障 */
+    animation: glitch-skew 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) both infinite;
+    animation-delay: 2s;
+    /* 每2秒抽搐一次，而不是一直抖 */
+}
+
+
+@keyframes shake-hard {
+    0% {
+        transform: translate(1px, 1px) rotate(0deg);
+    }
+
+    10% {
+        transform: translate(-1px, -2px) rotate(-1deg);
+    }
+
+    20% {
+        transform: translate(-3px, 0px) rotate(1deg);
+    }
+
+    30% {
+        transform: translate(3px, 2px) rotate(0deg);
+    }
+
+    40% {
+        transform: translate(1px, -1px) rotate(1deg);
+    }
+
+    50% {
+        transform: translate(-1px, 2px) rotate(-1deg);
+    }
+
+    60% {
+        transform: translate(-3px, 1px) rotate(0deg);
+    }
+
+    70% {
+        transform: translate(3px, 1px) rotate(-1deg);
+    }
+
+    80% {
+        transform: translate(-1px, -1px) rotate(1deg);
+    }
+
+    90% {
+        transform: translate(1px, 2px) rotate(0deg);
+    }
+
+    100% {
+        transform: translate(1px, -2px) rotate(-1deg);
+    }
+}
+
+.anim-shake {
+    animation: shake-hard 0.5s;
 }
 </style>
