@@ -8,6 +8,7 @@ export function createApp() {
   const app = createSSRApp(App);
   const pinia = createPinia();
   app.use(pinia);
+
   return {
     app,
     pinia, // 必须返回 pinia 实例

@@ -30,7 +30,7 @@
                     <text class="btn-text">{{ isPrimaryPressed ? '挣扎中...' : '开始挣扎' }}</text>
                 </button>
 
-                <button class="btn-secondary" v-if="saveData" @click="handleContinue">
+                <button class="btn-secondary" v-if="store.hasSaveData()" @click="handleContinue">
                     <text class="btn-text-secondary">继续游戏</text>
                 </button>
             </view>
@@ -44,14 +44,17 @@
 
 <script setup lang="ts">
 import LoginBg from "@/static/images/login-bg.png"
+import { useResourceStore } from '@/stores/resource';
 
 import { ref, onMounted } from 'vue'
 
+const store = useResourceStore();
 const saveData = ref<boolean>(false)
 const isPrimaryPressed = ref<boolean>(false)
 
 onMounted(() => {
-    console.log('页面加载完成')
+    console.log('页面加载完成', store.hasSaveData())
+
 })
 
 const handleStart = (): void => {
@@ -71,7 +74,7 @@ const handleStart = (): void => {
 }
 
 const handleContinue = (): void => {
-    saveData.value = uni.getStorageSync('gameData')
+    saveData.value = store.hasSaveData()
 
     if (saveData.value) {
         // uni.navigateTo({ url: '/pages/game/game?continue=true' })

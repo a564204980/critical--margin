@@ -10,7 +10,7 @@
                     <text class="title">
                         第1周<text class="line"></text>第1天<text class="time">上午</text>
                     </text>
-                    <text class="cash">$128.50</text>
+                    <text class="cash">${{ cash }}</text>
                 </view>
             </view>
             <view class="flex justify-between">
@@ -19,12 +19,14 @@
                     <text class="material-symbols-outlined" style="color:#8892a7">credit_card</text>
                     <view class="score-detail ">
                         <view class="text-gray">信用分</view>
-                        <view class="text-white">625</view>
+                        <view class="text-white">{{ creditScore }}</view>
                     </view>
                 </view>
             </view>
         </view>
         <CustomTabbar currentPath="subpackages/pages/main/index" />
+
+        <view @click="add">按钮</view>
 
         <view class="main-visual">
             <Visual id="visual-area">
@@ -33,44 +35,57 @@
             <Action id="action-list-container" :data="actionList" class="action-wrapper" :scrollHeight="scrollHeight" />
         </view>
 
+
+
         <!-- <view class="ambient text-gray flex justify-center">
             <text>“那阵持续的低鸣裹着疲惫渗透进来，分不清是外界声响，还是自己为生计运转到麻木的心跳。”</text>
         </view> -->
     </view>
 </template>
 
+
+
 <script setup lang="ts">
+
+
+
+
 import CustomTabbar from '@/components/CustomTabbar/CustomTabbar.vue'
 import StatusBar from "@/components/StatusBar.vue/StatusBar.vue"
 import Tag from "@/components/Tag/Tag.vue"
 import Visual from "./components/Visual.vue"
 import Action from "./components/Action.vue"
-import type { StatusBarItem } from "@/components/StatusBar.vue/types"
-import { onMounted, ref, getCurrentInstance } from 'vue'
-import { useGameStore } from '@/stores/game'
+import { onMounted, ref, getCurrentInstance, computed } from 'vue'
+import { useResourceStore } from "@/stores/resource"
+import { storeToRefs } from "pinia"
+import { ResourceType } from '@/constants/resource'
 
-const gameStore = useGameStore()
+const resourceStore = useResourceStore()
+const { cash, stamina, spirit, creditScore, health } = storeToRefs(resourceStore)
 
-const statusBars: StatusBarItem[] = [{
-    label: '财务',
-    value: 0.25,
-    color: '#cb504e',
-    icon: "ecg_heart"
-},
-{
-    label: '精神',
-    value: 0.4,
-    color: '#eebc5e',
-    icon: "cognition_2"
-},
-{
-    label: '体力',
-    value: 0.8,
-    color: '#64b5f6',
-    icon: "bolt"
-}]
+const STATUS_BAR_CONFIG = [
+    { key: 'health', label: '健康', color: '#cb504e', icon: 'ecg_heart' },
+    { key: 'spirit', label: '精神', color: '#eebc5e', icon: 'cognition_2' },
+    { key: 'stamina', label: '体力', color: '#64b5f6', icon: 'bolt' }
+] as const
 
-const actionList = ref(gameStore.availableActions)
+
+const statusBars = computed(() => {
+    const valueMap = {
+        health: health.value,
+        spirit: spirit.value,
+        stamina: stamina.value
+    }
+
+    return STATUS_BAR_CONFIG.map(item => ({
+        label: item.label,
+        value: Math.max(0, valueMap[item.key]) / 100,
+        color: item.color,
+        icon: item.icon
+    }));
+})
+
+const actionList = ref([])
 const scrollHeight = ref<number>(0)
 const address = ref<string>("车库工作室（个人）")
 
@@ -97,6 +112,10 @@ onMounted(() => {
         scrollHeight.value = (remainingPx * pixelRatio) - 20
     })
 })
+
+const add = () => {
+    resourceStore.addResource(ResourceType.STAMINA, 10, 'test')
+}
 
 </script>
 

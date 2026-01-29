@@ -1,9 +1,14 @@
 <script setup lang="ts">
 import { onLaunch, onShow, onHide } from "@dcloudio/uni-app";
 import { loadCustomFonts } from "@/utils/fonts";
+import { useResourceStore } from '@/stores/resource';
+
+const store = useResourceStore();
+
 onLaunch(() => {
   console.log("App Launch");
   loadCustomFonts();
+  store.initResource();
 });
 onShow(() => {
   console.log("App Show");
