@@ -26,7 +26,7 @@
         </view>
         <CustomTabbar currentPath="subpackages/pages/main/index" />
 
-        <view @click="add">按钮</view>
+        <view @click="add" class="text-white">按钮</view>
 
         <view class="main-visual">
             <Visual id="visual-area">
@@ -114,7 +114,9 @@ onMounted(() => {
 })
 
 const add = () => {
-    resourceStore.addResource(ResourceType.STAMINA, 10, 'test')
+    resourceStore.addResource(ResourceType.CASH, 500, 'test')
+    resourceStore.dailyCheck()
+    resourceStore.dailyCheck()
 }
 
 </script>

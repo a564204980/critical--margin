@@ -45,6 +45,8 @@
 <script setup lang="ts">
 import LoginBg from "@/static/images/login-bg.png"
 import { useResourceStore } from '@/stores/resource';
+import { removeStorage } from "@/utils/storage";
+import { STORAGE_KEY } from "@/constants/stroage";
 
 import { ref, onMounted } from 'vue'
 
@@ -58,6 +60,7 @@ onMounted(() => {
 })
 
 const handleStart = (): void => {
+    removeStorage(STORAGE_KEY)
 
     new Promise((resolve, reject) => {
         setTimeout(() => {

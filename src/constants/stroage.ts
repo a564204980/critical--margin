@@ -1,0 +1,1 @@
+export const STORAGE_KEY = "GAME_RESOURCE_DATA_V1";
