@@ -268,6 +268,49 @@ export const useResourceStore = defineStore("resource", () => {
     }, 1000);
   });
 
+  watch(
+    [stamina, health, creditScore, spirit],
+    ([newStamina, newHealth, newCredit, newSpirit]) => {
+      console.log("触发了嘛");
+      // 体力熔断，晕倒
+      if (newStamina <= 0 && !flags.value.isOut) {
+        console.log("体力耗尽，触发晕倒！");
+
+        reduceResource(ResourceType.CASH, 200, "急诊费用");
+
+        reduceResource(ResourceType.HEALTH, 10, "体力透支");
+
+        flags.value.isOut = true;
+      }
+
+      if (newCredit < 500) {
+        if (!flags.value.isCreditCrisis) {
+          flags.value.isCreditCrisis = true;
+          console.log("[Crash] 信用跌破红线，触发信用危机！");
+        }
+      } else {
+        if (flags.value.isCreditCrisis && newCredit >= 550) {
+          flags.value.isCreditCrisis = false;
+          console.log("[Recover] 信用分回升，危机解除。");
+        }
+      }
+
+      // 健康熔断，致命感染
+      if (newHealth <= 0) {
+        console.log("[GAME OVER] 生命体征消失...");
+        // 预留接口：触发结局路由跳转
+        // uni.redirectTo({ url: '/pages/ending/dead' });
+      }
+
+      // 精神熔断，麻木
+      if (newSpirit <= 0 && !flags.value.isNumb) {
+        flags.value.isNumb = true;
+        console.log("[Crash] 精神崩溃，进入麻木状态。");
+      }
+    },
+    { flush: "sync" }
+  );
+
   return {
     cash: readonly(cash),
     stamina: readonly(stamina),
